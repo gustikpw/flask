@@ -1,15 +1,18 @@
 from telnetlib import Telnet
+from dotenv import load_dotenv
 import time
 import re
+import os
 
 # host = '10.10.10.2'
+load_dotenv()
 
-username = 'zte'
-password = 'zte'
-
+username = os.getenv("OLT_USER")
+password = os.getenv("OLT_PASS")
+olt_port = os.getenv("OLT_PORT")
 
 def session(host):
-    tn = Telnet(host)
+    tn = Telnet(host,olt_port)
 
     tn.read_until(b'Username:')
     tn.write(username.encode('ascii') + b'\n')
