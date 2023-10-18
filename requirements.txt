@@ -1,0 +1,4 @@
+Flask=2.1.2
+load_dotenv
+mariadb
+routeros_api

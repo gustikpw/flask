@@ -20,11 +20,13 @@ host = os.getenv("OLT_HOST")
 app = Flask(__name__)
 
 
+@app.route("/ping")
+def ping():
+    return 'pong'
+
 @app.route("/")
 def hello_world():
-    return jsonify(getponpower(host, "1/1/3:19")["onu_rx"])
-    # return jsonify(onu_distance(host, '1/1/3:19')['distance'])
-    # return jsonify(getcard(hosts))
+    return 'hello world'
 
 @app.route("/v1/backup_cfg/", methods=["POST"])
 def backup_cfg():
