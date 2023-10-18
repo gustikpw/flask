@@ -10,7 +10,7 @@ if exist "%activate_script%" (
 	call "%activate_script%"
 	echo Virtual environment diaktifkan.
 
-	start "" "http://localhost/posonet.pendolo/"
+	start "" "http://localhost/posonet.provisioning/"
 	echo Membuka web.
     
 	REM Menjalankan flask run --reload
