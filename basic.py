@@ -18,7 +18,7 @@ def session(host):
     tn.write(username.encode('ascii') + b'\n')
 
     tn.read_until(b'Password:')
-    tn.write(username.encode('ascii') + b'\n')
+    tn.write(password.encode('ascii') + b'\n')
 
     tn.read_until(b'#')
     return tn
