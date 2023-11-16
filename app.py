@@ -52,6 +52,8 @@ def onuadd():
     description = request.form.get("description")
     ppp_profile = request.form.get("ppp_profile")
     access_mode = request.form.get("access_mode")
+    vlan_profile = request.form.get("vlan_profile")
+    cvlan = request.form.get("cvlan")
 
     index_onu = getNewIndexby(host, gpon_olt)
     auth = create_user_pass(name, sn)
@@ -65,6 +67,8 @@ def onuadd():
         "onu_index": str(index_onu["new_index"]),
         "gpon_onu": index_onu["registration_onu"],
         "access_mode": "pppoe",
+        "vlan_profile": vlan_profile,
+        "cvlan": cvlan,
         "username": auth["username"],
         "password": auth["password"],
     }
@@ -132,6 +136,8 @@ def reconfig_onu():
         "username": request.form.get("username"),
         "password": request.form.get("password"),
         "mode_config": request.form.get("mode_config"),
+        "vlan_profile": request.form.get("vlan_profile"),
+        "cvlan": request.form.get("cvlan"),
     }
 
     regis = basic.onuadd(host, post_data)
@@ -314,6 +320,11 @@ def rawdetailinfo():
 def rawonurun():
     gpon_onu = str(request.form.get("gpon_onu"))
     return basic.show_onu_run_config(host, gpon_onu)
+
+@app.route("/v1/rawonurunconfinterface")
+def rawonurunconfinterface():
+    gpon_onu = str(request.form.get("gpon_onu"))
+    return basic.show_onu_running_config_interface(host, gpon_onu)
 
 
 @app.route("/v1/rawshowcard")
@@ -498,7 +509,14 @@ def rawponpower():
     interface = str(request.form.get("interface"))
     raw_data = basic.show_pon_power_attenuation(host, interface)
     return raw_data.replace("ZXAN#", "\r\n")
-    # return jsonify(getrawponpower(host, interface))
+
+
+@app.route("/v1/getrawgponbaseinfo")
+def getrawgponbaseinfo():
+    interface = str(request.form.get("interface"))
+    raw_data = basic.show_gpon_onu_baseinfo(host, interface)
+    return raw_data
+    return jsonify(raw_data)
 
 
 @app.route("/v1/getonu_distance")

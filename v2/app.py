@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from dotenv import load_dotenv
 import os
-from . import basic
+import basic
 
 load_dotenv()
 
@@ -14,6 +14,12 @@ app = Flask(__name__)
 @app.route("")
 def hello_world():
     print("Hello")
+
+
+@app.route("v2/ssh")
+def ssh():
+
+
 
 
 @app.route("/v2/onu_state_all", methods=["GET"])

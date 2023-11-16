@@ -1,7 +1,6 @@
 To Run Server
-1. pip install virtualenv
 python -m venv venv
-env/Scripts/activate
+venv/Scripts/activate
 
 
 if error, run this in terminal
