@@ -275,6 +275,10 @@ def restore_factory(host, gpon_onu):
 def show_pon_onu_uncfg(host):
     tn = session(host)
 
+    tn.write(b"terminal length 0\n")
+    time.sleep(0.05)
+    tn.read_until(b'#')
+    
     tn.write(b'show pon onu uncfg\n')
     time.sleep(0.1)
 
