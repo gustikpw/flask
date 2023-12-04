@@ -52,12 +52,13 @@ def show_state(host):
 
     tn.write(b"terminal length 0\n")
     time.sleep(0.2)
-
     tn.read_until(b'#')
+    
     tn.write(b'show gpon onu state\n')
     time.sleep(1.5)
 
-    return tn.read_very_eager().decode('utf-8')
+    return tn.read_until(b'#').decode('utf-8')
+    # return tn.read_very_eager().decode('utf-8')
 
 
 def show_run(host):
