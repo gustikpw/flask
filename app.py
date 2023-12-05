@@ -401,6 +401,7 @@ def onustate():
     # mengambil index kedua dari terakhir utk mendapatkan 'ONU Number: x/x'
     onu_number = telnet_table.split("\r\n")[-2]
     data = []
+    # interfaces = []
     for c in array:
         row = {
             "onu_index": c.split()[0],
@@ -412,7 +413,11 @@ def onustate():
         data.append(row)
 
     return jsonify(
-        {"data": data, "onu_number": onu_number.replace("ONU Number: ", "").strip()}
+        {
+            "data": data, 
+            "onu_number": onu_number.replace("ONU Number: ", "").strip(),
+            # "interfaces": interfaces
+        }
     )
 
 
