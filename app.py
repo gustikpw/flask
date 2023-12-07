@@ -479,7 +479,7 @@ def create_user_pass(name, sn):
     removespace = re.sub(r"\s", "-", name)
 
     username = removespace[:15] + sn[-8:]
-    password = "." + sn[-8:] + "!"
+    password = "-" + sn[-8:] + "!"
 
     return {"username": username, "password": password}
 
