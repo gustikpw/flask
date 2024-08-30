@@ -73,7 +73,11 @@ def onuadd():
         "password": auth["password"],
     }
 
-    regis = basic.onuadd(host, post_data)
+    if onu_type == 'FIBERHOME' :
+        regis = basic.onuaddFiberhome(host, post_data)
+    else:
+        regis = basic.onuadd(host, post_data)
+
     # tunggu 8 detik pon modem melakukan lock (ditandai dgn lampu pon berhenti berkedip)
     # time.sleep(8)
     # distance = onu_distance(host, post_data["gpon_onu"])["distance"]
@@ -479,7 +483,7 @@ def create_user_pass(name, sn):
     removespace = re.sub(r"\s", "-", name)
 
     username = removespace[:15] + sn[-8:]
-    password = "-" + sn[-8:] + "!"
+    password = "." + sn[-8:] + "!"
 
     return {"username": username, "password": password}
 

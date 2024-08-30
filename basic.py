@@ -391,6 +391,54 @@ def onuadd(host, data):
     return tn.read_until(b'#').decode('utf-8')
 
 
+def onuaddFiberhome(host, data):
+
+    tn = session(host)
+
+    cmd = """
+    conf t
+
+    interface gpon-olt_{}
+    onu {} type {} sn {}
+    exit
+
+    interface gpon-onu_{}
+    name {}
+    description {}
+    tcont 1 profile default
+    gemport 1 tcont 1
+    service-port 1 vport 1 user-vlan {} vlan {}
+    exit
+
+    pon-onu-mng gpon-onu_{}
+    service 1 gemport 1 vlan {}
+    wan-ip 1 mode pppoe username {} password {} vlan-profile {} host 1
+    vlan port veip_1 mode hybrid
+    exit
+    exit
+
+    """.format(
+        data['gpon_olt'], 
+        data['onu_index'], 
+        data['onu_type'], 
+        data['sn'], 
+        data['gpon_onu'], 
+        data['name'], 
+        data['description'],
+        data['cvlan'],
+        data['cvlan'], 
+        data['gpon_onu'],
+        data['cvlan'], 
+        data['username'], 
+        data['password'],
+        data['vlan_profile'])
+
+    tn.write(cmd.encode('ascii'))
+    time.sleep(2)
+
+    return tn.read_until(b'#').decode('utf-8')
+
+
 def delete_onu(host, data):
 
     tn = session(host)
