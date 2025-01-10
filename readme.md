@@ -3,6 +3,9 @@ python -m venv venv
 venv/Scripts/activate
 
 
+rename 'env' to '.env'
+
+
 if error, run this in terminal
 
 Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy Unrestricted

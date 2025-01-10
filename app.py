@@ -86,14 +86,15 @@ def onuadd():
 
     if regis.__contains__("ZXAN#"):
         # add PPP Secret Mikrotik
-        mtik = routers.add_ppp_secret(
-            post_data["username"], post_data["password"], access_mode, ppp_profile
-        )
+        # create secret disabled. php already make it
+        # mtik = routers.add_ppp_secret(
+        #     post_data["username"], post_data["password"], access_mode, ppp_profile
+        # )
 
         return jsonify(
             {
                 "message_olt": "Registering onu " + post_data["gpon_onu"] + " success!",
-                "message_mikrotik": mtik["message"],
+                "message_mikrotik": "mtik['message']",
                 "data": {
                     "name": post_data["name"],
                     "username": post_data["username"],
@@ -200,27 +201,27 @@ def noonu():
 
     if delete.__contains__("[Successful]"):
         # delete PPP Secret Mikrotik
-        mtik = routers.del_ppp_secret(username)
-        if mtik['status'] == True :
-            return jsonify(
-                {
-                    "message": "Deleting onu "
-                    + gpon_olt
-                    + " index "
-                    + onu_index
-                    + " success!"
-                }
-            )
-        else:
-            return jsonify(
-                {
-                    "message": "Deleting onu "
-                    + gpon_olt
-                    + " index "
-                    + onu_index
-                    + " success but error deleting username in Router."
-                }
-            )
+        # mtik = routers.del_ppp_secret(username)
+        # if mtik['status'] == True :
+        return jsonify(
+            {
+                "message": "Deleting onu "
+                + gpon_olt
+                + " index "
+                + onu_index
+                + " success!"
+            }
+        )
+        # else:
+        #     return jsonify(
+        #         {
+        #             "message": "Deleting onu "
+        #             + gpon_olt
+        #             + " index "
+        #             + onu_index
+        #             + " success but error deleting username in Router."
+        #         }
+        #     )
     else:
         return jsonify(
             {
