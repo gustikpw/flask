@@ -5,7 +5,7 @@ import re
 import os
 import basic
 import routers
-import db
+# import db
 import parse_stdout as parse
 
 os.environ['FLASK_RUN_PORT'] = '5002'
