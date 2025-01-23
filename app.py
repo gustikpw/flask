@@ -193,7 +193,7 @@ def noonu():
     # for host in hosts:
     gpon_olt = str(request.form.get("gpon_olt"))
     onu_index = str(request.form.get("onu_index"))
-    username = str(request.form.get("username"))
+    # username = str(request.form.get("username"))
 
     data = {"gpon_olt": gpon_olt, "onu_index": onu_index}
 
