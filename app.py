@@ -684,6 +684,46 @@ def getcard(host):
     data = basic.show_card(host)
     return parse.to_list(data, "INSERVICE")
 
+@app.route("/v1/wpa", methods=["POST"])
+def wpa():
+    gpon_onu = request.form.get("gpon_onu")
+    ssid = request.form.get("ssid")
+    wpa_key = request.form.get("wpa_key")
+    mode = request.form.get("mode")
+
+    data = {
+        "gpon_onu": gpon_onu,
+        "ssid": ssid,
+        "wpa_key": wpa_key,
+    }
+
+    if mode == 'both' or mode == 'ssid' or mode == 'wpa_key':
+        send = basic.change_wpa(host, data, mode)
+        
+        if send.__contains__("ZXAN#"):
+            if mode == 'wpa_key':
+                msg = "Success change WPA Key"
+            if mode == 'ssid':
+                msg = "Success change SSID"
+            if mode == 'both':
+                msg = "Success change SSID and WPA Key"
+
+            return jsonify({
+                "message": msg,
+                "status": 200,
+            })
+        else:
+            return jsonify({
+                "message": "Some error while change WPA",
+                "status": 500,
+            })
+    else:
+        return jsonify({
+                "message": "No change be made",
+                "status": 404,
+            })
+    
+    
 
 
 
@@ -824,57 +864,7 @@ def getNewIndexby(host, interface):
                     }
 
 
-# @app.route("/v1/getnewindexs")
-# def getNewIndex(host, interface):
-#     # for host in hosts:
-#     data = basic.show_gpon_state_by_interface(host, interface)
 
-#     # step 1: indeks yang ada didalam tabel
-#     dataX = """
-#         OnuIndex   Admin State  OMCC State  Phase State  Channel    
-#         --------------------------------------------------------------
-#         1/1/3:1     enable       enable      working      1(GPON)
-#         1/1/3:2     enable       enable      working      1(GPON)
-#         1/1/3:3     enable       enable      working      1(GPON)
-#         1/1/3:5     enable       enable      working      1(GPON)
-#         1/1/3:7     enable       disable     DyingGasp    1(GPON)
-#         1/1/3:8     enable       enable      working      1(GPON)
-#         1/1/3:9     enable       enable      working      1(GPON)
-#         1/1/3:10    enable       disable     OffLine      1(GPON)
-#         ONU Number: 6/8
-#         """
-#     if data.__contains__("No related information to show."):
-#         return {"new_index": 1, "registration_onu": interface + ":1"}
-#     else:
-#         # mengambil nomor indeks dari setiap baris pada kolom OnuIndex
-#         indeks = [int(row.split()[0].split(":")[-1]) for row in data.split("\n")[3:-2]]
-
-#         # output: indeks = [1, 2, 3, 5, 7, 8, 9, 10]
-#         # print(indeks[-1]) untuk mengambil indeks terakhir
-
-#         # step 2: mencari indeks yang terlewati
-#         missing = []
-
-#         for i in range(1, len(indeks) + 1):
-#             if i not in indeks:
-#                 missing.append(i)
-
-#         # jika tdk ada indeks yang terlewati, ambil indeks terakhir + 1
-#         newinterface = interface.replace("gpon-olt_", "")
-#         indeksbaru = 0
-#         if len(missing) == 0:
-#             indeksbaru = indeks[-1] + 1
-#             return {
-#                 "new_index": indeksbaru,
-#                 "registration_onu": newinterface + ":" + str(indeksbaru),
-#             }
-#         else:
-#             # mencetak hasil. [0] adalah mengambil indeks pertama
-#             # return '1/1/1:x'
-#             return {
-#                 "new_index": missing[0],
-#                 "registration_onu": newinterface + ":" + str(missing[0]),
-#             }
 
 
 if __name__ == "__main__":

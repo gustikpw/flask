@@ -484,3 +484,40 @@ def remote_onu(host, data):
     time.sleep(1)
 
     return tn.read_until(b'ZXAN#').decode('utf-8')
+
+def change_wpa(host, data, mode):
+    
+    tn = session(host)
+
+    if mode == 'both':
+        cmd = """
+        conf t
+        pon-onu-mng gpon-onu_{}
+        ssid auth wpa wifi_0/1 wpa2-psk key {}
+        ssid ctrl wifi_0/1 name {}
+        end
+
+        """.format(data['gpon_onu'], data['wpa_key'], data['ssid'])
+    elif mode == 'ssid':
+        cmd = """
+        conf t
+        pon-onu-mng gpon-onu_{}
+        ssid ctrl wifi_0/1 name {}
+        end
+
+        """.format(data['gpon_onu'], data['ssid'])
+    elif mode == 'wpa_key':
+        cmd = """
+        conf t
+        pon-onu-mng gpon-onu_{}
+        ssid auth wpa wifi_0/1 wpa2-psk key {}
+        end
+
+        """.format(data['gpon_onu'], data['wpa_key'])
+    else:
+        cmd = "\n"
+
+    tn.write(cmd.encode('ascii'))
+    time.sleep(1)
+
+    return tn.read_until(b'ZXAN#').decode('utf-8')
