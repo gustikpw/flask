@@ -450,7 +450,7 @@ def uncfg():
             row = {
                 "interface": c.split()[0].replace("gpon-olt_", ""),
                 "model": c.split()[1],
-                "sn": c.split()[-1],
+                "sn": c.split()[2],
             }
             data.append(row)
 
