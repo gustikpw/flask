@@ -358,8 +358,8 @@ def onuadd(host, data):
     interface gpon-onu_{}
     name {}
     description {}
-    tcont 1 profile default
-    gemport 1 tcont 1
+    {}
+    {}
     service-port 1 vport 1 user-vlan {} vlan {}
     exit
 
@@ -377,6 +377,8 @@ def onuadd(host, data):
         data['gpon_onu'], 
         data['name'], 
         data['description'],
+        data['tcont'],
+        data['gemport'],
         data['cvlan'],
         data['cvlan'], 
         data['gpon_onu'],
@@ -521,3 +523,10 @@ def change_wpa(host, data, mode):
     time.sleep(1)
 
     return tn.read_until(b'ZXAN#').decode('utf-8')
+
+def show_gpon_profile_tcont(host):
+    tn = session(host)
+    tn.write(b'show gpon profile tcont\n')
+    time.sleep(0.1)
+
+    return tn.read_until(b'#').decode('utf-8')

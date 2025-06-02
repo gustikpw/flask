@@ -54,6 +54,8 @@ def onuadd():
     access_mode = request.form.get("access_mode")
     vlan_profile = request.form.get("vlan_profile")
     cvlan = request.form.get("cvlan")
+    tcont = request.form.get("tcont")
+    gemport = request.form.get("gemport")
 
     index_onu = getNewIndexby(host, gpon_olt)
     auth = create_user_pass(name, sn)
@@ -68,6 +70,8 @@ def onuadd():
         "gpon_onu": index_onu["registration_onu"],
         "access_mode": "pppoe",
         "vlan_profile": vlan_profile,
+        "tcont": tcont,
+        "gemport": gemport,
         "cvlan": cvlan,
         "username": auth["username"],
         "password": auth["password"],
@@ -143,6 +147,8 @@ def reconfig_onu():
         "mode_config": request.form.get("mode_config"),
         "vlan_profile": request.form.get("vlan_profile"),
         "cvlan": request.form.get("cvlan"),
+        "tcont" : request.form.get("tcont"),
+        "gemport" : request.form.get("gemport")
     }
 
     regis = basic.onuadd(host, post_data)
@@ -152,6 +158,12 @@ def reconfig_onu():
             {
                 "message_olt": "Registering onu " + post_data["gpon_onu"] + " success!",
                 "status": True,
+                "data": {
+                    "name": post_data["name"],
+                    "username": post_data["username"],
+                    "password": post_data["password"],
+                    "gpon_onu": post_data["gpon_onu"],
+                },
             }
         )
     else:
@@ -723,8 +735,22 @@ def wpa():
                 "status": 404,
             })
     
-    
+@app.route("/v1/getTcont", methods=["GET"])
+def getTcont():
+    data = basic.show_gpon_profile_tcont(host)
+    # profiles = re.findall(r'Profile name :([^\s+\r\n]+)', data)
+    # Mencari semua Profile name
+    profile_names = re.findall(r'Profile name :(\S+)', data)
 
+    # Mencari semua Type (angka di kolom pertama setelah header)
+    types = re.findall(r'Type\s+FBW\(kbps\).*?\r\n\s*(\d+)', data, re.DOTALL)
+
+    # Menggabungkan hasil
+    result = [{"profile_name": name, "type": type_} 
+            for name, type_ in zip(profile_names, types)]
+
+    
+    return jsonify(result)
 
 
 def getponpower(host, interface):
